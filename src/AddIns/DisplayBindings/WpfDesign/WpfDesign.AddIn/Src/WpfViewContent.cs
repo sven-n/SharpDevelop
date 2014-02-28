@@ -39,7 +39,7 @@ namespace ICSharpCode.WpfDesign.AddIn
 			
 			BasicMetadata.Register();
 			
-			WpfToolbox.Instance.AddProjectDlls(file);
+			//WpfToolbox.Instance.AddProjectDlls(file);
 
 			ProjectService.ProjectItemAdded += ProjectService_ProjectItemAdded;
 			
@@ -49,8 +49,8 @@ namespace ICSharpCode.WpfDesign.AddIn
 
 		void ProjectService_ProjectItemAdded(object sender, ProjectItemEventArgs e)
 		{
-			if (e.ProjectItem is ReferenceProjectItem)
-				WpfToolbox.Instance.AddProjectDlls(this.Files[0]);
+//			if (e.ProjectItem is ReferenceProjectItem)
+//				WpfToolbox.Instance.AddProjectDlls(this.Files[0]);
 		}
 		
 		static WpfViewContent()
@@ -191,6 +191,7 @@ namespace ICSharpCode.WpfDesign.AddIn
 
 		void OnPropertyGridPropertyChanged(object sender, PropertyChangedEventArgs e)
 		{
+			if (propertyGridView.PropertyGrid.ReloadActive) return;
 			if (e.PropertyName == "Name") {
 				if (!propertyGridView.PropertyGrid.IsNameCorrect) return;
 				
@@ -205,7 +206,7 @@ namespace ICSharpCode.WpfDesign.AddIn
 				
 				// rename the member
 				IMember member = info.CompilationUnit.Classes [0].AllMembers.FirstOrDefault(m => m.Name == propertyGridView.PropertyGrid.OldName);
-				if (member != null) {
+				if (member != null && propertyGridView.PropertyGrid.Name != null) {
 					FindReferencesAndRenameHelper.RenameMember(member, propertyGridView.PropertyGrid.Name);
 				}
 			}
